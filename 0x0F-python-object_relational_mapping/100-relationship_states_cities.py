@@ -1,7 +1,6 @@
 #!/usr/bin/python3
-"""adds the State object “California”
-with the City “San Francisco”
-to the database hbtn_0e_100_usa"""
+"""Adds the State object “California”
+with the City “San Francisco” to the database hbtn_0e_100_usa"""
 
 import sys
 from sqlalchemy import create_engine
@@ -23,7 +22,7 @@ if __name__ == "__main__":
                            .format(username, password, database),
                            pool_pre_ping=True)
 
-    # Create all tables in the engine
+    # Bind the engine to the Base class
     Base.metadata.create_all(engine)
 
     # Create a new session
@@ -40,7 +39,6 @@ if __name__ == "__main__":
 
     # Add the new state and city to the session
     session.add(new_state)
-    session.add(new_city)
 
     # Commit the session to the database
     session.commit()
