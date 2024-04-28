@@ -16,12 +16,10 @@ if __name__ == "__main__":
     password = sys.argv[2]
     database = sys.argv[3]
 
-    # Create an engine to connect to the database
     engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/{}'
-                           .format(username, password, database),
-                           pool_pre_ping=True)
+                            .format(username, password, database),
+                            pool_pre_ping=True)
 
-    # Bind the engine to the Base class
     Base.metadata.create_all(engine)
 
     # Create a new session
