@@ -23,7 +23,7 @@ def filter_states(username, password, database, state_name):
     connection = MySQLdb.connect(host="localhost", user=username, passwd=password, db=database)
     cursor = connection.cursor()
 
-    # Prepare SQL query with user input
+    # Prepare SQL query with user input using format for safety
     query = """
       SELECT *
       FROM states
@@ -36,7 +36,7 @@ def filter_states(username, password, database, state_name):
 
     # Fetch results
     results = cursor.fetchall()
-`
+
     # Check for results
     if not results:
       print("No state found")
@@ -52,6 +52,6 @@ def filter_states(username, password, database, state_name):
     if connection:
       connection.close()
 
+# Script execution disabled when imported
 if __name__ == "__main__":
-  # Script execution is disabled when imported
   pass
