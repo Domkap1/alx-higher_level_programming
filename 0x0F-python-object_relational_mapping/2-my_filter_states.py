@@ -8,50 +8,34 @@ from the database `hbtn_0e_0_usa`.
 
 import MySQLdb
 
-def filter_states(username, password, database, state_name):
-  """
-  Filters states table based on a provided state name.
+def main():
+    # User input (replace with actual values)
+    mysql_user = "your_username"
+    mysql_password = "your_password"
+    db_name = "your_database"
+    state_name = "California"  # Replace with the desired state name
 
-  Args:
-    username: MySQL username.
-    password: MySQL password.
-    database: Database name.
-    state_name: State name to search for.
-  """
-  try:
-    # Connect to MySQL server
-    connection = MySQLdb.connect(host="localhost", user=username, passwd=password, db=database)
-    cursor = connection.cursor()
+    try:
+        # Connect to MySQL server
+        db = MySQLdb.connect(host="localhost", user=mysql_user, passwd=mysql_password, db=db_name)
+        cursor = db.cursor()
 
-    # Prepare SQL query with user input using format for safety
-    query = """
-      SELECT *
-      FROM states
-      WHERE name = '{}'
-      ORDER BY states.id ASC
-    """.format(state_name)
+        # Create the SQL query using format
+        query = "SELECT * FROM states WHERE name = %s ORDER BY id ASC"
+        cursor.execute(query, (state_name,))
 
-    # Execute the query
-    cursor.execute(query)
+        # Fetch and display results
+        results = cursor.fetchall()
+        for row in results:
+            state_id, state_name = row
+            print(f"State ID: {state_id}, Name: {state_name}")
 
-    # Fetch results
-    results = cursor.fetchall()
+        # Close the cursor and database connection
+        cursor.close()
+        db.close()
 
-    # Check for results
-    if not results:
-      print("No state found")
-    else:
-      # Print results formatted as requested
-      for row in results:
-        print(f"ID: {row[0]} | Name: {row[1]}")
+    except MySQLdb.Error as e:
+        print(f"Error: {e}")
 
-  except MySQLdb.Error as err:
-    print(f"Error connecting to database: {err}")
-  finally:
-    # Close connection
-    if connection:
-      connection.close()
-
-# Script execution disabled when imported
 if __name__ == "__main__":
-  pass
+    main()
