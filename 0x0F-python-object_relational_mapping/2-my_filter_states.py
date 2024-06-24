@@ -6,24 +6,52 @@ where `name` matches the argument
 from the database `hbtn_0e_0_usa`.
 """
 
-import MySQLdb as db
-from sys import argv
+import MySQLdb
 
-if __name__ == '__main__':
-    # Connect to the database
-    db_connect = db.connect(host="localhost", port=3306,
-                            user=argv[1], passwd=argv[2], db=argv[3])
-    db_cursor = db_connect.cursor()
+def filter_states(username, password, database, state_name):
+  """
+  Filters states table based on a provided state name.
 
-    # Create query using format
-    query = "SELECT * FROM states WHERE name LIKE BINARY '{}' ORDER BY states.id ASC".format(argv[4])
-    db_cursor.execute(query)
-    rows_selected = db_cursor.fetchall()
+  Args:
+    username: MySQL username.
+    password: MySQL password.
+    database: Database name.
+    state_name: State name to search for.
+  """
+  try:
+    # Connect to MySQL server
+    connection = MySQLdb.connect(host="localhost", user=username, passwd=password, db=database)
+    cursor = connection.cursor()
 
-    # Print each row
-    for row in rows_selected:
-        print(row)
+    # Prepare SQL query with user input
+    query = """
+      SELECT *
+      FROM states
+      WHERE name = '{}'
+      ORDER BY states.id ASC
+    """.format(state_name)
 
-    # Close cursor and connection
-    db_cursor.close()
-    db_connect.close()
+    # Execute the query
+    cursor.execute(query)
+
+    # Fetch results
+    results = cursor.fetchall()
+`
+    # Check for results
+    if not results:
+      print("No state found")
+    else:
+      # Print results formatted as requested
+      for row in results:
+        print(f"ID: {row[0]} | Name: {row[1]}")
+
+  except MySQLdb.Error as err:
+    print(f"Error connecting to database: {err}")
+  finally:
+    # Close connection
+    if connection:
+      connection.close()
+
+if __name__ == "__main__":
+  # Script execution is disabled when imported
+  pass
