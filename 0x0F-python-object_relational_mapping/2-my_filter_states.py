@@ -18,9 +18,12 @@ if __name__ == '__main__':
                             user=argv[1], passwd=argv[2], db=argv[3])
     db_cursor = db_connect.cursor()
 
-    query = "SELECT * FROM states WHERE name = %s ORDER BY states.id ASC"
-    db_cursor.execute(query, (argv[4],))
+    query = "SELECT * FROM states WHERE name LIKE BINARY '{}' ORDER BY states.id ASC".format(argv[4])
+    db_cursor.execute(query)
     rows_selected = db_cursor.fetchall()
 
     for row in rows_selected:
         print(row)
+
+    db_cursor.close()
+    db_connect.close()
